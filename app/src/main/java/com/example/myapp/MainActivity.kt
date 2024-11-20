@@ -7,10 +7,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         showButton = findViewById(R.id.showButton)
 
         hideButton.setOnClickListener {
-            // Show a confirmation dialog before hiding the app
             AlertDialog.Builder(this)
                 .setTitle("Hide App")
                 .setMessage("The app will disappear from the launcher. You can restore it using a broadcast command or another method.")
@@ -63,20 +62,8 @@ class MainActivity : AppCompatActivity() {
         val enableFilter = IntentFilter(ENABLE_APP_ACTION)
         val disableFilter = IntentFilter(DISABLE_APP_ACTION)
 
-        // Register receivers using ContextCompat for API compatibility
-        ContextCompat.registerReceiver(
-            this,
-            enableReceiver,
-            enableFilter,
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
-
-        ContextCompat.registerReceiver(
-            this,
-            disableReceiver,
-            disableFilter,
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
+        registerReceiver(enableReceiver, enableFilter, Context.RECEIVER_NOT_EXPORTED)
+        registerReceiver(disableReceiver, disableFilter, Context.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onPause() {
@@ -94,8 +81,14 @@ class MainActivity : AppCompatActivity() {
                 newState,
                 PackageManager.DONT_KILL_APP
             )
+            Log.d("MainActivity", "Launcher state changed to $newState")
         } catch (e: Exception) {
             e.printStackTrace()
+            AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage("Failed to change app visibility. Please try again.")
+                .setPositiveButton("OK", null)
+                .show()
         }
     }
 }
