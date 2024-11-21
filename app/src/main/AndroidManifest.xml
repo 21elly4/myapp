@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Required permission for toggling launcher visibility -->
+    <uses-permission android:name="android.permission.UPDATE_HIDE_ICON" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -31,6 +34,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
+
                 <!-- Handle HTTP deep links -->
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -43,6 +47,5 @@
                     android:path="/restore" />
             </intent-filter>
         </activity>
-
     </application>
 </manifest>

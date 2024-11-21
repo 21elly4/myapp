@@ -82,6 +82,13 @@ class MainActivity : AppCompatActivity() {
                 PackageManager.DONT_KILL_APP
             )
             Log.d("MainActivity", "Launcher state changed to $newState")
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+            AlertDialog.Builder(this)
+                .setTitle("Permission Denied")
+                .setMessage("Your app lacks the necessary permission to change launcher visibility. Please check permissions.")
+                .setPositiveButton("OK", null)
+                .show()
         } catch (e: Exception) {
             e.printStackTrace()
             AlertDialog.Builder(this)
